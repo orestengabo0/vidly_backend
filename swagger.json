@@ -1,0 +1,631 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Vidly Node Application API Testing",
+    "description": "Documentation for Vidly APIs"
+  },
+  "basePath": "/api",
+  "schemes": ["http", "https"],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/auth": {
+      "post": {
+        "summary": "Authenticate user and get token",
+        "parameters": [
+          {
+            "name": "credentials",
+            "in": "body",
+            "description": "User credentials",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AuthInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "format": "JWT",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/genres": {
+      "get": {
+        "summary": "Get all genres",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Genre"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new genre",
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "genre",
+            "in": "body",
+            "description": "Genre object to be created",
+            "security": {
+              "Bearer": []
+            },
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GenreInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Genre created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/genres/{id}": {
+      "get": {
+        "summary": "Get genre by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the genre to retrieve",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/Genre"
+            }
+          },
+          "404": {
+            "description": "Genre not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Updating a movie",
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the genre to update",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "description": "Genre to update",
+            "security": {
+                "Bearer": []
+            },
+            "schema": {
+                "$ref": "#/definitions/GenreInput"
+            },
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Genre updated successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete genre by ID",
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the genre to delete",
+            "security": {
+                "Bearer": []
+            },
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Genre deleted successfully"
+          },
+          "404": {
+            "description": "Genre not found"
+          }
+        }
+      }
+    },
+    "/movies": {
+      "get": {
+        "summary": "Get all movies",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Movie"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new movie",
+        "parameters": [
+          {
+            "name": "movie",
+            "in": "body",
+            "description": "Movie object to be created",
+            "security": {
+              "Bearer": []
+            },
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MovieInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Movie created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/movies/{id}": {
+      "get": {
+        "summary": "Get movie by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the movie to retrieve",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/Movie"
+            }
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Updating movie by ID",
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the genre to delete",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "movie",
+            "in": "body",
+            "description": "Movie object to be to be updated",
+            "security": {
+                "Bearer": []
+            },
+            "required": true,
+            "schema": {
+                "$ref": "#/definitions/MovieInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie updated successfully"
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete movie by ID",
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the movie to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Movie deleted successfully"
+          },
+          "404": {
+            "description": "Movie not found"
+          }
+        }
+      }
+    },
+    "/customers": {
+      "get": {
+        "summary": "Get all customers",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "security": {
+              "Bearer": []
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Customer"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new customer",
+        "parameters": [
+          {
+            "name": "customer",
+            "in": "body",
+            "description": "Customer object to be created",
+            "security": {
+              "Bearer": []
+            },
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomerInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Customer created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/customers/{id}": {
+      "get": {
+        "summary": "Get customer by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the customer to retrieve",
+            "security": {
+              "Bearer": []
+            },
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/Customer"
+            }
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update customer by ID",
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the customer to delete",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "customer",
+            "in": "body",
+            "description": "Update a customer",
+            "security": {
+                "Bearer": []
+            },
+            "required": true,
+            "schema": {
+                "$ref":"#/definitions/CustomerInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer Updated successfully"
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete customer by ID",
+        "parameters": [
+          {
+            "name": "x-auth-token",
+            "in": "header",
+            "description": "Authorization token",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the customer to delete",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer deleted successfully"
+          },
+          "404": {
+            "description": "Customer not found"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get current user",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User object to be created",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User created successfully"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Genre": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "GenreInput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "Movie": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "genre": {
+          "type": "string"
+        },
+        "rating": {
+          "type": "string"
+        }
+      }
+    },
+    "MovieInput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "genre": {
+          "type": "string"
+        },
+        "rating": {
+          "type": "string"
+        }
+      }
+    },
+    "Customer": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomerInput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "isAdmin": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserInput": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "isAdmin": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AuthInput": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
